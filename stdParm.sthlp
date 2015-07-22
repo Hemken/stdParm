@@ -1,12 +1,12 @@
 {smcl}
-{* *! version 1.0  19jul2015}{...}
+{* *! version 1.0  20jul2015}{...}
 {vieweralsosee "[R] regress, beta" "help regress"}{...}
 {* *! vieweralsosee "[R] estimates table" "help estimates table"}{...}
 {viewerjumpto "Syntax" "stdParm##syntax"}{...}
-{viewerjumpto "Description" "stdBeta##description"}{...}
-{viewerjumpto "Options" "stdBeta##options"}{...}
-{viewerjumpto "Remarks" "stdBeta##remarks"}{...}
-{viewerjumpto "Examples" "stdBeta##examples"}{...}
+{viewerjumpto "Description" "stdParm##description"}{...}
+{viewerjumpto "Options" "stdParm##options"}{...}
+{viewerjumpto "Remarks" "stdParm##remarks"}{...}
+{viewerjumpto "Examples" "stdParm##examples"}{...}
 {title:Title}
 
 {phang}
@@ -18,7 +18,7 @@
 
 {p 8 17 2}
 {cmd:stdParm}
-[{cmd: , nodepvar}]
+[{cmd: , nodepvar store replace {it:estimates_table_options}}]
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
@@ -35,7 +35,8 @@
 {title:Description}
 
 {pstd}
-{cmd:stdParm} Calculates centered and standardized coefficients, returning
+{cmd:stdParm} Calculates centered and standardized coefficients, outputs the
+	results using {cmd: estimates table}, and returns
 	the centering and standardizing matrices.
 
 
@@ -49,7 +50,7 @@
 
 {phang}
 {opt store} stores ereturn statistics for all three models.  These are
-{cmd: estimates store}s name Original, Centered, and Standardized.
+{cmd: estimates store}s named Original, Centered, and Standardized.
 
 {phang}
 {opt replace} if any estimates stores named Original, Centered, and Standardized
@@ -64,7 +65,7 @@ reporting.
 {title:Remarks}
 
 {pstd}
-Presented at Columbus Stata Conference 2015.
+Presented at 2015 Stata Conference Columbus.
 
 
 {marker examples}{...}
