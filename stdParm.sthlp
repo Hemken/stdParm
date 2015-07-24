@@ -38,7 +38,11 @@
 {cmd:stdParm} Calculates centered and standardized coefficients, outputs the
 	results using {cmd: estimates table}, and returns
 	the centering and standardizing matrices.
-
+	
+{pstd}
+Note: for models estimated with {cmd:logit} or {cmd:logistic}, the dependent
+	variable is not centered.  For {cmd: glm} models be sure to specify
+	the appropriate option.
 
 {marker options}{...}
 {title:Options}

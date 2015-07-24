@@ -22,14 +22,51 @@ program stdParm, rclass
 	// mean and sd of depvar
 	quietly summarize `e(depvar)' if `touse'
 	tempname depvarmean depvarsd
+	// exclude the dependent variable for some models
+	if "`e(cmd)'" == "regress" {
 		if "`depvar'" == "" {
 			scalar `depvarmean' = r(mean)
 			scalar `depvarsd' = r(sd)
-			} 
+			}
 			else {
 				scalar `depvarmean' = 0
 				scalar `depvarsd' = 1
 			}
+		}
+		else if "`e(cmd)'" == "logit" | "`e(cmd)'" == "logistic" {
+				display "Assuming {cmd: nodepvar}"
+				scalar `depvarmean' = 0
+				scalar `depvarsd' = 1
+		}
+		else if "`e(cmd)'" == "glm" {
+			if "`e(varfunct)'" == "Gaussian" & "`e(linkt)'" == "Identity" {
+				if "`depvar'" == "" {
+					scalar `depvarmean' = r(mean)
+					scalar `depvarsd' = r(sd)
+					}
+					else {
+						scalar `depvarmean' = 0
+						scalar `depvarsd' = 1
+					}
+				}
+				else if "`e(varfunct)'" == "Bernoulli" & "`e(linkt)'" == "Logit" {
+					display "Assuming {cmd: nodepvar}"
+					scalar `depvarmean' = 0
+					scalar `depvarsd' = 1
+				}
+			else {
+				if "`depvar'" == "" {
+					display "Failure to specify {cmd: nodepvar} where needed can cause errors." 
+						scalar `depvarmean' = r(mean)
+						scalar `depvarsd' = r(sd)
+					}
+					else {
+						scalar `depvarmean' = 0
+						scalar `depvarsd' = 1
+					}
+			}
+		}
+
 	// make a copy of the coefficient vector
 	tempname BO BC BS // for coefficient vectors
 	matrix `BO' = e(b)
