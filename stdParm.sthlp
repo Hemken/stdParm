@@ -1,16 +1,18 @@
 {smcl}
 {* *! version 1.0  20jul2015}{...}
 {vieweralsosee "[R] regress, beta" "help regress"}{...}
-{* *! vieweralsosee "[R] estimates table" "help estimates table"}{...}
+{vieweralsosee "[R] estimates table" "help estimates table"}{...}
 {viewerjumpto "Syntax" "stdParm##syntax"}{...}
 {viewerjumpto "Description" "stdParm##description"}{...}
 {viewerjumpto "Options" "stdParm##options"}{...}
 {viewerjumpto "Remarks" "stdParm##remarks"}{...}
 {viewerjumpto "Examples" "stdParm##examples"}{...}
+{viewerjumpto "Stored Results" "stdParm##results"}{...}
 {title:Title}
 
 {phang}
-{bf:stdParm} {hline 2} After estimating a regression model, calculate centered and standardized coefficients
+{bf:stdParm} {hline 2} After {cmd: regress}, {cmd: logit}, or {cmd: glm}, 
+calculates centered and standardized coefficients.
 
 
 {marker syntax}{...}
@@ -35,13 +37,14 @@
 {title:Description}
 
 {pstd}
-{cmd:stdParm} Calculates centered and standardized coefficients, outputs the
+{cmd:stdParm} Post estimation after a generalized linear model, 
+	calculates centered and standardized coefficients, outputs the
 	results using {cmd: estimates table}, and returns
 	the centering and standardizing matrices.
 	
 {pstd}
 Note: for models estimated with {cmd:logit} or {cmd:logistic}, the dependent
-	variable is not centered.  For {cmd: glm} models be sure to specify
+	variable is not centered.  For other {cmd: glm} models be sure to specify
 	the appropriate option.
 
 {marker options}{...}
@@ -78,3 +81,15 @@ Presented at 2015 Stata Conference Columbus.
 {phang}{cmd:. regress price c.mpg##c.weight}{p_end}
 
 {phang}{cmd:. stdParm}{p_end}
+
+{marker results}{...}
+{title:Stored Results}
+
+{pstd}
+{cmd:stdParm} stores the following in {cmd:r()}:
+
+{synoptset 15 tabbed}{...}
+{p2col 5 15 19 2: Matrices}{p_end}
+{synopt:{cmd:r(C)}}recentering matrix{p_end}
+{synopt:{cmd:r(S)}}rescaling matrix{p_end}
+{p2colreset}{...}

@@ -1,4 +1,4 @@
-cd "Z:\PUBLIC_web\Stataworkshops\stdParm"
+*cd "Z:\PUBLIC_web\Stataworkshops\stdParm"
 sysuse auto, clear
 //----------------------------
 // transform-data algorithm (installed in PERSONAL)

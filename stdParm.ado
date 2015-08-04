@@ -1,4 +1,4 @@
-* version 1.0 20July2015
+* version 1.0 4Aug2015
 * Doug Hemken, Social Science Computing Coop
 *    Univ of Wisc - Madison
 program stdParm, rclass
@@ -11,7 +11,8 @@ program stdParm, rclass
 	local storenames "`r(names)' Original Centered Standardized"
 	local storedups : list dups storenames
 	if "`storedups'" != "" & "`replace'" == "" {
-		di "{error: estimate store(s) `storedups' cannot be overwritten}"
+		display "{error: Estimate store(s) `storedups' cannot be overwritten}"
+		display "  Try using the {cmd:replace} option."
 		exit
 		}
 	estimates store Original
@@ -33,38 +34,43 @@ program stdParm, rclass
 				scalar `depvarsd' = 1
 			}
 		}
-		else if "`e(cmd)'" == "logit" | "`e(cmd)'" == "logistic" {
-				display "Assuming {cmd: nodepvar}"
+	else if "`e(cmd)'" == "logit" | "`e(cmd)'" == "logistic" {
+			display "Assuming option {cmd:nodepvar}"
+			scalar `depvarmean' = 0
+			scalar `depvarsd' = 1
+		}
+	else if "`e(cmd)'" == "glm" {
+		if "`e(varfunct)'" == "Gaussian" & "`e(linkt)'" == "Identity" {
+			if "`depvar'" == "" {
+				scalar `depvarmean' = r(mean)
+				scalar `depvarsd' = r(sd)
+				}
+			else {
 				scalar `depvarmean' = 0
 				scalar `depvarsd' = 1
-		}
-		else if "`e(cmd)'" == "glm" {
-			if "`e(varfunct)'" == "Gaussian" & "`e(linkt)'" == "Identity" {
-				if "`depvar'" == "" {
+				}
+			}
+		else if "`e(varfunct)'" == "Bernoulli" & "`e(linkt)'" == "Logit" {
+			display "Assuming option {cmd:nodepvar}"
+			scalar `depvarmean' = 0
+			scalar `depvarsd' = 1
+			}
+		else {
+			if "`depvar'" == "" {
+				display "Failure to specify option {cmd:nodepvar} where needed will cause errors." 
 					scalar `depvarmean' = r(mean)
 					scalar `depvarsd' = r(sd)
-					}
-					else {
-						scalar `depvarmean' = 0
-						scalar `depvarsd' = 1
-					}
 				}
-				else if "`e(varfunct)'" == "Bernoulli" & "`e(linkt)'" == "Logit" {
-					display "Assuming {cmd: nodepvar}"
+				else {
 					scalar `depvarmean' = 0
 					scalar `depvarsd' = 1
 				}
-			else {
-				if "`depvar'" == "" {
-					display "Failure to specify {cmd: nodepvar} where needed can cause errors." 
-						scalar `depvarmean' = r(mean)
-						scalar `depvarsd' = r(sd)
-					}
-					else {
-						scalar `depvarmean' = 0
-						scalar `depvarsd' = 1
-					}
 			}
+		}
+	else {
+		display "{error: Only valid after {cmd:regress, logit, logistic, or glm}}"
+		display "  Try using the stdBeta package, instead."
+		exit
 		}
 
 	// make a copy of the coefficient vector
@@ -101,7 +107,6 @@ program stdParm, rclass
 
 	// generate matrix of centering coefficients, Ck
 	//     and matrix of standardizing coefficients, Sk
-	*matrix list `PO'
 	csmatrices `r(cvars)' if `touse', po(`PO')
 	tempname Ck Sk
 	matrix `Ck' = r(Ck)
@@ -335,7 +340,7 @@ program csmatrices, rclass
 	local cvars : subinstr local cvars "_cons" ""
 	unopvar `cvars'
 	local cv `r(varlist)'
-	
+	display "Recentering and rescaling:  `cv'"
 	
 	// find means and standard deviations
 	if "`cv'" != "" {
