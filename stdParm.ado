@@ -1,6 +1,7 @@
-* version 1.0 4Aug2015
+*! version 1.0.1 9Dec2015
 * Doug Hemken, Social Science Computing Coop
 *    Univ of Wisc - Madison
+* update 9Dec2015 fixed a missing space typo in lines 230 and 291 thanks to Estie Hudes
 program stdParm, rclass
 	version 13
 	syntax [, nodepvar store replace *] 
@@ -227,7 +228,7 @@ program effectorder, rclass
 			else if "`r(type)'" == "interaction" {
 				matrix `EO'[3, `i'] = `r(k_names)'
 				forvalues j = 1/`r(k_names)' {
-					if "`r(op`j')'" == "c" | "`r(op`j')'" == "co"{ 
+					if "`r(op`j')'" == "c" | "`r(op`j')'" == "co" { 
 						local pvars `pvars' `r(name`j')'
 						local order = `order' + 1
 					}
@@ -288,7 +289,7 @@ foreach term of local terms {
 			local cv
 			local fv
 			forvalues i = 1/`r(k_names)' {
-				if "`r(op`i')'" == "c" | "`r(op`i')'" == "co"{
+				if "`r(op`i')'" == "c" | "`r(op`i')'" == "co" {
 					if "`cv'" == "" {
 						local cv `r(op`i')'.`r(name`i')'
 						}
